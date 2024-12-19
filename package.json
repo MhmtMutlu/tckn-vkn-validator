@@ -1,0 +1,28 @@
+{
+  "name": "tckn-vkn-validator",
+  "version": "1.0.0",
+  "description": "TC kimlik numarası ve vergi kimlik numarası doğrulama kütüphanesi",
+  "main": "./src/index.js",
+  "target": "esnext",
+  "module": "esnext",
+  "keywords": [
+    "tckn",
+    "vkn",
+    "tckn doğrulama",
+    "tckn validator",
+    "vkn doğrulama",
+    "vkn validator"
+  ],
+  "author": "MhmtMutlu",
+  "license": "MIT",
+  "dependencies": {
+    "node-fetch": "^3.3.2"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.26.0",
+    "@babel/preset-env": "^7.26.0",
+    "babel-jest": "^29.7.0",
+    "jest": "^29.7.0",
+    "jest-fetch-mock": "^3.0.3"
+  }
+}
