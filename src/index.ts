@@ -8,7 +8,12 @@ import fetch from "node-fetch";
  * @param {number} birthdate - Kullanıcının doğum yılı.
  * @returns {Promise<boolean>} - Doğrulama sonucu (true/false).
  */
-async function validateTcknNvi(tckn, name, surname, birthdate) {
+async function validateTcknNvi(
+  tckn: string,
+  name: string,
+  surname: string,
+  birthdate: string
+): Promise<boolean> {
   if (!validateTckn(tckn)) {
     return false;
   }
@@ -48,7 +53,7 @@ async function validateTcknNvi(tckn, name, surname, birthdate) {
     throw error;
   }
 
-  function parseSOAPResponse(responseText) {
+  function parseSOAPResponse(responseText: string) {
     const parser = new DOMParser();
     const xmlDoc = parser.parseFromString(responseText, "text/xml");
 
@@ -68,7 +73,7 @@ async function validateTcknNvi(tckn, name, surname, birthdate) {
  * @param {string} tckn - T.C. Kimlik Numarası (11 haneli).
  * @returns {boolean} - Doğrulama sonucu (true/false).
  */
-function validateTckn(tckn) {
+function validateTckn(tckn: string): boolean {
   if (!/^\d{11}$/.test(tckn) || tckn[0] === "0") {
     return false;
   }
@@ -95,7 +100,7 @@ function validateTckn(tckn) {
  * @param {string} vkn - Vergi Kimlik Numarası (10 haneli).
  * @returns {boolean} - Doğrulama sonucu (true/false).
  */
-function validateVkn(vkn) {
+function validateVkn(vkn: string): boolean {
   if (vkn.length !== 10) {
     return false;
   }

@@ -1,10 +1,10 @@
 declare module "tckn-vkn-validator" {
-  export async function validateTcknNvi(
+  export function validateTcknNvi(
     tckn: string,
     name: string,
     surname: string,
     birthdate: number
-  ): boolean;
+  ): Promise<boolean>;
   export function validateTckn(tckn: string): boolean;
   export function validateVkn(vkn: string): boolean;
 }
