@@ -1,4 +1,14 @@
-import fetch from "node-fetch";
+declare const window: any;
+declare const global: any;
+
+const createDOMParser = () => {
+  if (typeof window !== "undefined" && window.DOMParser) {
+    return new window.DOMParser();
+  } else {
+    const { DOMParser } = require("xmldom");
+    return new DOMParser();
+  }
+};
 
 /**
  * T.C. Kimlik No'nun NVI'den doğrulama fonksiyonu.
@@ -54,7 +64,7 @@ async function validateTcknNvi(
   }
 
   function parseSOAPResponse(responseText: string) {
-    const parser = new DOMParser();
+    const parser = createDOMParser();
     const xmlDoc = parser.parseFromString(responseText, "text/xml");
 
     const resultNode = xmlDoc.getElementsByTagName(
