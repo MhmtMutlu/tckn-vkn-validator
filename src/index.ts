@@ -1,83 +1,3 @@
-declare const window: any;
-declare const global: any;
-
-const createDOMParser = () => {
-  if (typeof window !== "undefined" && window.DOMParser) {
-    return new window.DOMParser();
-  } else {
-    const { DOMParser } = require("xmldom");
-    return new DOMParser();
-  }
-};
-
-/**
- * T.C. Kimlik No'nun NVI'den doğrulama fonksiyonu.
- * @param {string} tckn - T.C. Kimlik Numarası (11 haneli).
- * @param {string} name - Kullanıcının adı.
- * @param {string} surname - Kullanıcının soyadı.
- * @param {number} birthdate - Kullanıcının doğum yılı.
- * @returns {Promise<boolean>} - Doğrulama sonucu (true/false).
- */
-async function validateTcknNvi(
-  tckn: string,
-  name: string,
-  surname: string,
-  birthdate: string
-): Promise<boolean> {
-  if (!validateTckn(tckn)) {
-    return false;
-  }
-
-  const soapRequest = `<?xml version="1.0" encoding="utf-8"?>
-    <soap12:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://www.w3.org/2003/05/soap-envelope">
-    <soap12:Body>
-        <TCKimlikNoDogrula xmlns="http://tckimlik.nvi.gov.tr/WS">
-        <TCKimlikNo>${tckn}</TCKimlikNo>
-        <Ad>${name}</Ad>
-        <Soyad>${surname}</Soyad>
-        <DogumYili>${birthdate}</DogumYili>
-        </TCKimlikNoDogrula>
-    </soap12:Body>
-    </soap12:Envelope>`;
-
-  const url = "https://tckimlik.nvi.gov.tr/service/kpspublic.asmx";
-
-  try {
-    const response = await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/soap+xml; charset=utf-8",
-      },
-      body: soapRequest,
-    });
-
-    if (!response.ok) {
-      throw new Error(`HTTP Hatası: ${response.status}`);
-    }
-
-    const responseText = await response.text();
-    const result = parseSOAPResponse(responseText);
-    return result;
-  } catch (error) {
-    console.error("Doğrulama sırasında hata oluştu:", error);
-    throw error;
-  }
-
-  function parseSOAPResponse(responseText: string) {
-    const parser = createDOMParser();
-    const xmlDoc = parser.parseFromString(responseText, "text/xml");
-
-    const resultNode = xmlDoc.getElementsByTagName(
-      "TCKimlikNoDogrulaResult"
-    )[0];
-    if (!resultNode) {
-      throw new Error("Geçersiz yanıt formatı");
-    }
-
-    return resultNode.textContent === "true";
-  }
-}
-
 /**
  * T.C. Kimlik No doğrulama fonksiyonu.
  * @param {string} tckn - T.C. Kimlik Numarası (11 haneli).
@@ -126,4 +46,4 @@ function validateVkn(vkn: string): boolean {
   return (10 - (sum % 10)) % 10 === lastDigit;
 }
 
-export { validateTckn, validateTcknNvi, validateVkn };
+export { validateTckn, validateVkn };
