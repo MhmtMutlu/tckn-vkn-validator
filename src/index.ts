@@ -8,16 +8,17 @@ function validateTckn(tckn: string): boolean {
     return false;
   }
 
-  const digits = tckn.split("").map(Number);
-  const sumOfFirst10 = digits
+  const digits: number[] = tckn.split("").map(Number);
+  const sumOfFirst10: number = digits
     .slice(0, 10)
     .reduce((sum, digit) => sum + digit, 0);
   if (sumOfFirst10 % 10 !== digits[10]) {
     return false;
   }
 
-  const oddSum = digits[0] + digits[2] + digits[4] + digits[6] + digits[8];
-  const evenSum = digits[1] + digits[3] + digits[5] + digits[7];
+  const oddSum: number =
+    digits[0] + digits[2] + digits[4] + digits[6] + digits[8];
+  const evenSum: number = digits[1] + digits[3] + digits[5] + digits[7];
   if ((oddSum * 7 - evenSum) % 10 !== digits[9]) {
     return false;
   }
@@ -35,14 +36,14 @@ function validateVkn(vkn: string): boolean {
     return false;
   }
 
-  let stepOfVkn = [];
+  let stepOfVkn: number[] = [];
   const lastDigit = Number(vkn.charAt(9));
   for (let i = 0; i < 9; i++) {
-    const tmp = (Number(vkn.charAt(i)) + (9 - i)) % 10;
+    const tmp: number = (Number(vkn.charAt(i)) + (9 - i)) % 10;
     stepOfVkn[i] = (tmp * 2 ** (9 - i)) % 9;
     if (tmp !== 0 && stepOfVkn[i] === 0) stepOfVkn[i] = 9;
   }
-  const sum = stepOfVkn.reduce((a, b) => a + b, 0) % 10;
+  const sum: number = stepOfVkn.reduce((a, b) => a + b, 0) % 10;
   return (10 - (sum % 10)) % 10 === lastDigit;
 }
 
